@@ -1,0 +1,31 @@
+#include <windows.h>
+#include <stdio.h>
+
+int main() {
+    // This is needed to store the handle to the file object
+    // the 'INVALID_HANDLE_VALUE' is just to intialize the variable
+    HANDLE hFile = INVALID_HANDLE_VALUE; 
+
+    // The full path of the file to create.
+    // Double backslashes are required to escape the single backslash character in C
+    LPCWSTR filePath = L"file.txt";
+
+    // Call CreateFileW with the file path
+    // The additional parameters are directly from the documentation
+    hFile = CreateFileW(filePath, GENERIC_ALL, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    // On failure CreateFileW returns INVALID_HANDLE_VALUE
+    // GetLastError() is another Windows API that retrieves the error code of the previously executed WinAPI function
+    if (hFile == INVALID_HANDLE_VALUE) {
+        printf("[-] CreateFileW Api Function Failed With Error : %d\n", GetLastError());
+        return -1;
+    } 
+
+    // File created successfully
+    printf("[+] File created successfully!\n");
+
+    // Don't forget to close the file handle when you're done with it
+    CloseHandle(hFile);
+
+    return 0;
+}
